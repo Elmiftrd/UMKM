@@ -1,0 +1,74 @@
+@startuml
+entity provinsi {
+  id : int <pk>
+  provinsi : varchar(50)
+}
+
+entity kabupaten {
+  id : int <pk>
+  kabupaten : varchar(50)
+  id_provinsi : int <fk>
+}
+
+entity kecamatan {
+  id : int <pk>
+  kecamatan : varchar(50)
+  id_kabupaten : int <fk>
+}
+
+entity desa {
+  id : int <pk>
+  desa : varchar(50)
+  id_kecamatan : int <fk>
+}
+
+entity sektor_usaha {
+  id : int <pk>
+  nama : varchar(50)
+}
+
+entity bidang_usaha {
+  id : int <pk>
+  nama : varchar(50)
+}
+
+entity faktor_laba_rendah {
+  id : int <pk>
+  faktor : varchar(100)
+}
+
+entity skala_usaha {
+  id : int <pk>
+  skala : enum('mikro', 'kecil', 'menengah')
+}
+
+entity data_usaha {
+  id : int <pk>
+  id_desa : int <fk>
+  id_sektor_usaha : int <fk>
+  id_bidang_usaha : int <fk>
+  id_faktor_laba_rendah : int <fk>
+  id_skala_usaha : int <fk>
+  nama : varchar(50)
+  alamat : text
+  jumlah_karyawan : int
+  aset : int
+  modal : int
+  tahun : date
+  omset_offline : int
+  omset_lazada : int
+  omset_tokopedia : int
+  omset_shoppee: int
+  omset_bukalapak : int
+}
+
+provinsi ||--o{ kabupaten : "terdiri dari"
+kabupaten ||--o{ kecamatan : "terdiri dari"
+kecamatan ||--o{ desa : "terdiri dari"
+desa ||--o{ data_usaha : "memiliki banyak"
+
+sektor_usaha }|--|| data_usaha : "satu sektor"
+bidang_usaha }|--|| data_usaha : "satu bidang"
+faktor_laba_rendah }|--|| data_usaha : "satu faktor"
+skala_usaha }|--|| data_usaha : "satu skala"
+@enduml
