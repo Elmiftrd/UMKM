@@ -1,0 +1,154 @@
+create table provinsi 
+(
+  id int not null auto increment,
+  provinsi varchar (20),
+  primary key (id)
+)
+
+insert into provinsi(provinsi)
+values ('lampung')
+  
+create table kabupaten
+(
+    id int not null AUTO_INCREMENT,
+    kabupaten varchar (20),
+    id_provinsi int,
+    primary key (id),
+    foreign key (id_provinsi) REFERENCES provinsi(id)
+)
+
+INSERT INTO kabupaten (kabupaten, id_provinsi)
+VALUES ('Pesawaran', (SELECT id FROM provinsi WHERE provinsi = 'Lampung'));
+
+create table kecamatan 
+(
+    id int not null AUTO_INCREMENT,
+    kecamatan varchar (20),
+    id_kabupaten int,
+    primary key (id),
+    foreign key (id_kabupaten) references kabupaten (id)
+)    
+
+SET @id_kabupaten = (SELECT id FROM kabupaten WHERE kabupaten = 'Pesawaran');
+INSERT INTO kecamatan (kecamatan, id_kabupaten)
+VALUES 
+('Gedong Tataan', @id_kabupaten),
+('Kedondong', @id_kabupaten),
+('Marga Punduh', @id_kabupaten),
+('Negeri Katon', @id_kabupaten),
+('Padang Cermin', @id_kabupaten),
+('Punduh Pidada', @id_kabupaten),
+('Tegineneng', @id_kabupaten),
+('Teluk Pandan', @id_kabupaten),
+('Way Khilau', @id_kabupaten),
+('Way Lima', @id_kabupaten),
+('Way Ratai', @id_kabupaten);
+
+create table desa
+(
+  id int not null auto_increment,
+  desa varchar (20),
+  id_kecamatan int,
+  primary key (id),
+  foreign key (id_kecamatan) references kecamatan(id)
+)
+
+ALTER TABLE desa ADD COLUMN temp_kecamatan VARCHAR(20);
+LOAD DATA INFILE 'D:/KULIAH/SEMESTER 6/SQL/desa3.csv' 
+INTO TABLE desa
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(desa, temp_kecamatan);
+
+UPDATE desa d
+JOIN kecamatan k ON d.temp_kecamatan=k.kecamatan
+SET d.id_kecamatan=k.id;
+
+ALTER TABLE desa DROP COLUMN temp_kecamatan;
+
+create table sektor_usaha
+(
+    id int not null AUTO_INCREMENT,
+    nama varchar (100),
+    primary key (id)
+)
+
+INSERT INTO sektor_usaha (nama) VALUES
+('Jasa Pendidikan'),
+('Produk UMKM'),
+('Jasa Lainnya'),
+('Perdagangan Besar dan Eceran'),
+('Peternakan'),
+('Perikanan'),
+('Jasa Kesehatan Dan Kegiatan Sosial'),
+('Konstruksi'),
+('Transportasi Dan Pergudangan, Peyediaan Akomodasi Dan Makanan'),
+('Pertanian'),
+('Perkebunan'),
+('Pengolahan, Pengadaan Listrik, Gas, Pengadaan Air'),
+('Reparasi Mobil Dan Sepeda Motor'),
+('Pengelolaan Sampah, Limbah Dan Daur Ulang'),
+('Pertambangan Dan Penggalian, Industri'),
+('Perikanan'),
+('Pengelolaan Sampah, Limbah dan Daur Ulang');
+
+create table bidang_usaha 
+(
+    id int not null auto_increment,
+    nama varchar (50),
+    primary key (id)
+)
+
+insert into bidang_usaha (nama)
+values ('Usaha Lainnya'),('Fashion'),('Elektronik dan Gadget'),('Kuliner'),('Agribisnis'),('Kerajinan Tangan'),('Otomotif')
+
+create table faktor_laba_rendah
+(
+    id int not null auto_increment,
+    faktor varchar (100),
+    primary key (id)
+)
+
+insert into faktor_laba_rendah(faktor)
+values ('Kurang Promosi'),('Kurang Tenaga Kerja'),('Persaingan Ketat'),('kurang keterampilan'),('Keterbatasan Modal'),('Keterbatasan Ruang'),('Tidak Rendah')
+
+create table skala_usaha
+(
+    id int not null AUTO_INCREMENT,
+    skala varchar (10),
+    primary key (id)
+)
+
+insert into skala_usaha(skala)
+values ('mikro'),('kecil'),('menengah')
+  
+create table data_usaha
+(
+    id int not null auto_increment,
+    id_desa int,
+    id_sektor_usaha int,
+    id_bidang_usaha int,
+    id_faktor_laba_rendah int, 
+    id_skala_usaha int,
+    nama varchar (50),
+    alamat text,
+    jumlah_karyawan int,
+    aset int,
+    modal int,
+    tahun date,
+    omset_offline int,
+    omset_lazada int ,
+    omset_tokopedia int ,
+    omset_bukalapak int,
+    primary key (id),
+    foreign key (id_desa) REFERENCES desa(id),
+    foreign key (id_sektor_usaha) REFERENCES sektor_usaha (id),
+     foreign key (id_skala_usaha) REFERENCES skala_usaha (id),
+     foreign key (id_bidang_usaha) REFERENCES bidang_usaha (id),
+     foreign key (id_faktor_laba_rendah) REFERENCES faktor_laba_rendah (id)
+)
+   
+    
+
+
