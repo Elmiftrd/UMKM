@@ -148,7 +148,33 @@ create table data_usaha
      foreign key (id_bidang_usaha) REFERENCES bidang_usaha (id),
      foreign key (id_faktor_laba_rendah) REFERENCES faktor_laba_rendah (id)
 )
-   
+
+CREATE TABLE temp_usaha (
+    nama_usaha VARCHAR(255),
+    kecamatan VARCHAR(100),
+    desa VARCHAR(100),
+    sektor_usaha VARCHAR(100),
+    bidang_usaha VARCHAR(100),
+    jumlah_karyawan INT,
+    aset DECIMAL(15,2),
+    modal DECIMAL(15,2),
+    skala_usaha VARCHAR(50),
+    tahun INT,
+    omset_offline DECIMAL(15,2),
+    omset_lazada DECIMAL(15,2),
+    omset_tokopedia DECIMAL(15,2),
+    omset_shopee DECIMAL(15,2),
+    omset_bukalapak DECIMAL(15,2),
+    faktor_rendahnya_laba TEXT
+);
+
+LOAD DATA INFILE 'D:/KULIAH/SEMESTER 6/SQL/data usaha.csv'
+INTO TABLE temp_usaha
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(nama_usaha, kecamatan, desa, sektor_usaha, bidang_usaha, jumlah_karyawan, aset, modal, skala_usaha, tahun, omset_offline, omset_lazada, omset_tokopedia, omset_shopee, omset_bukalapak, faktor_rendahnya_laba);
+
     
 
 
