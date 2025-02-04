@@ -144,9 +144,9 @@ create table data_usaha
     primary key (id),
     foreign key (id_desa) REFERENCES desa(id),
     foreign key (id_sektor_usaha) REFERENCES sektor_usaha (id),
-     foreign key (id_skala_usaha) REFERENCES skala_usaha (id),
-     foreign key (id_bidang_usaha) REFERENCES bidang_usaha (id),
-     foreign key (id_faktor_laba_rendah) REFERENCES faktor_laba_rendah (id)
+    foreign key (id_skala_usaha) REFERENCES skala_usaha (id),
+    foreign key (id_bidang_usaha) REFERENCES bidang_usaha (id),
+    foreign key (id_faktor_laba_rendah) REFERENCES faktor_laba_rendah (id)
 )
 
 CREATE TABLE temp_usaha (
@@ -175,6 +175,32 @@ LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (nama_usaha, kecamatan, desa, sektor_usaha, bidang_usaha, jumlah_karyawan, aset, modal, skala_usaha, tahun, omset_offline, omset_lazada, omset_tokopedia, omset_shopee, omset_bukalapak, faktor_rendahnya_laba);
 
-    
+UPDATE data_usaha u
+JOIN kecamatan k ON u.kecamatan = k.kecamatan
+SET u.kecamatan = k.id;
+
+UPDATE data_usaha u
+JOIN desa d ON u.desa = d.desa
+SET u.desa = d.id;
+
+CREATE TABLE data_usaha (
+    id int not null auto_increment,
+    nama_usaha VARCHAR(255),
+    kecamatan VARCHAR(100),
+    desa VARCHAR(100),
+    sektor_usaha VARCHAR(100),
+    bidang_usaha VARCHAR(100),
+    jumlah_karyawan INT,
+    aset DECIMAL(15,2),
+    modal DECIMAL(15,2),
+    skala_usaha VARCHAR(50),
+    tahun INT,
+    omset_offline DECIMAL(15,2),
+    omset_lazada DECIMAL(15,2),
+    omset_tokopedia DECIMAL(15,2),
+    omset_shopee DECIMAL(15,2),
+    omset_bukalapak DECIMAL(15,2),
+    faktor_rendahnya_laba TEXT
+);
 
 
