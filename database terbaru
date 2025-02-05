@@ -144,7 +144,7 @@ create table bidang_usaha
 create table sektor_usaha
 (
     id int not null AUTO_INCREMENT,
-    sektor varchar(50),
+    sektor varchar(100),
     primary key(id)
 );
 
