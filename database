@@ -263,3 +263,97 @@ JOIN faktor_rendahnya_laba f ON t.faktor_rendahnya_laba = f.faktor
 JOIN skala_usaha sk ON t.skala_usaha = sk.skala;
 
 
+
+create table provinsi 
+(
+    id int not null AUTO_INCREMENT,
+    provinsi varchar (20),
+    primary key (id)
+)
+
+insert into provinsi (provinsi)
+values ('Lampung'),
+	('Sumatera Utara'),
+	('Jawa Timur')
+
+create table kabupaten 
+(
+    id int not null AUTO_INCREMENT,
+    kabupaten varchar  (20),
+    id_provinsi int,
+    primary key (id),
+    foreign key (id_provinsi) references provinsi (id)
+)
+
+buat table sementara yang berisi data sesuai csv 
+CREATE TABLE temp_kabupaten (
+    kabupaten VARCHAR(50),
+    provinsi VARCHAR(50)
+);
+
+
+LOAD DATA INFILE 'C:/Users/ASUS/Downloads/kabupaten.csv'
+INTO TABLE temp_kabupaten
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(kabupaten,provinsi);
+maka data di csv sudah masuk ke table temp_kabupaten 
+
+ternyata krna di import ke csv ada karakter belebih sehingga hapus dulu
+ini pengecekannya 
+SELECT provinsi, LENGTH(provinsi) FROM provinsi;
+SELECT provinsi, LENGTH(provinsi) FROM temp_kabupaten; 
+ini penghapusannya 
+UPDATE temp_kabupaten 
+SET provinsi = TRIM(REPLACE(REPLACE(provinsi, '\r', ''), '\n', ''));
+
+
+selanjutnya memasukkan data ke table kabupaten 
+INSERT INTO kabupaten (kabupaten, id_provinsi)
+SELECT t.kabupaten, p.id
+FROM temp_kabupaten t
+JOIN provinsi p ON t.provinsi = p.provinsi;
+
+menghapus table sementara 
+drop table temp_kabupaten
+
+membuat table kecamatan 
+create table kecamatan 
+(
+    id int not null AUTO_INCREMENT,
+    kecamatan varchar (20),
+    id_kabupaten int,
+    primary key(id),
+    foreign key (id_kabupaten) references kabupaten(id)
+)
+
+membuat table sementara 
+create table temp_kecamatan 
+(
+    kecamatan varchar (20),
+    kabupaten varchar(20)
+)
+
+selanjutnya memasukkan ata csv ke table sementara
+LOAD DATA INFILE 'C:/Users/ASUS/Downloads/kecamatan.csv'
+INTO TABLE temp_kecamatan
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(kecamatan,kabupaten);
+
+hpus karakter berlebih 
+SELECT kabupaten, LENGTH(kabupaten) FROM kabupaten;
+SELECT kabupaten, LENGTH(kabupaten) FROM temp_kecamatan;
+UPDATE temp_kecamatan 
+SET kabupaten = TRIM(REPLACE(REPLACE(kabupaten, '\r', ''), '\n', ''));
+
+
+INSERT INTO kecamatan (kecamatan, id_kabupaten)
+SELECT t.kecamatan, kp.id
+FROM temp_kecamatan t
+JOIN kabupaten kp ON t.kabupaten= kp.kabupaten;
+
+
+
