@@ -204,3 +204,62 @@ CREATE TABLE data_usaha (
 );
 
 
+create table data_usaha
+(
+    id int not null auto_increment,
+    nama_usaha varchar (50),
+    id_kecamatan int,
+    id_desa int,
+    id_sektor_usaha int,
+    id_bidang_usaha int,
+    jumlah_karyawan int,
+    aset int,
+    modal int,
+    id_skala_usaha INT,
+    tahun date,
+    omset_offline int,
+    omset_lazada int ,
+    omset_tokopedia int ,
+    omset_shopee int,
+    omset_bukalapak int,
+    id_faktor_rendahnya_laba int,
+    primary key (id),
+    foreign key (id_desa) REFERENCES desa(id),
+    foreign key (id_kecamatan) REFERENCES kecamatan(id),
+    foreign key (id_sektor_usaha) REFERENCES sektor_usaha (id),
+    foreign key (id_skala_usaha) REFERENCES skala_usaha (id),
+    foreign key (id_bidang_usaha) REFERENCES bidang_usaha (id),
+    foreign key (id_faktor_rendahnya_laba) REFERENCES faktor_rendahnya_laba (id)
+)
+
+
+INSERT INTO data_usaha (
+    id, nama_usaha,id_kecamatan,id_desa,id_sektor_usaha, id_bidang_usaha,jumlah_karyawan, aset, modal, tahun, 
+    omset_offline, omset_lazada, omset_tokopedia, omset_shopee, omset_bukalapak,id_faktor_rendahnya_laba
+)
+SELECT 
+	k.id as id_kecamatan,
+    d.id AS id_desa,
+    s.id AS id_sektor_usaha,
+    b.id AS id_bidang_usaha,
+    f.id AS id_faktor_rendahnya_laba,
+    sk.id AS id_skala_usaha,
+    t.nama, 
+    t.jumlah_karyawan, 
+    t.aset, 
+    t.modal, 
+    t.tahun,
+    t.omset_offline, 
+    t.omset_lazada, 
+    t.omset_tokopedia, 
+    t.omset_shopee, 
+    t.omset_bukalapak
+FROM temp_data_usaha t
+JOIN desa d ON t.desa = d.desa 
+JOIN kecamatan k ON t.kecamatan = k.kecamatan AND k.id = d.id_kecamatan
+JOIN sektor_usaha s ON t.sektor_usaha = s.nama
+JOIN bidang_usaha b ON t.bidang_usaha = b.nama
+JOIN faktor_rendahnya_laba f ON t.faktor_rendahnya_laba = f.faktor
+JOIN skala_usaha sk ON t.skala_usaha = sk.skala;
+
+
