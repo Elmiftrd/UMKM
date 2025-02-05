@@ -132,3 +132,64 @@ JOIN kecamatan kc ON t.kecamatan= kc.kecamatan;
 
 hapus table sementara 
 drop table temp_desa
+
+buat table bidang usaha, faktor rendahnya lab,sektor usaha, dan skala usaha
+create table bidang_usaha
+(
+    id int not null AUTO_INCREMENT,
+    bidang varchar(50),
+    primary key(id)
+);
+
+create table sektor_usaha
+(
+    id int not null AUTO_INCREMENT,
+    sektor varchar(50),
+    primary key(id)
+);
+
+create table skala_usaha
+(
+    id int not null AUTO_INCREMENT,
+    skala varchar(50),
+    primary key(id)
+);
+
+create table faktor_rendahnya_laba
+(
+    id int not null AUTO_INCREMENT,
+   faktor varchar(50),
+    primary key(id)
+);
+
+membuat table data usaha
+create table data_usaha 
+(
+    id int not null AUTO_INCREMENT,
+    nama_usaha varchar (50),
+    id_provinsi int,
+    id_kabupaten int,
+    id_kecamatan int,
+    id_desa int,
+    id_bidang_usaha int,
+    id_sektor_usaha int,
+    jumlah_karyawan int,
+    aset decimal (15,2),
+    modal decimal(15,2),
+    omset_offline decimal(15,2),
+    omset_lazada decimal(15,2),
+    omset_tokopedia decimal(15,2),
+    omset_shopee decimal (15,2),
+    omset_bukalapak decimal(15,2),
+    id_faktor_rendahnya_laba int,
+    primary key(id),
+    foreign key (id_provinsi) REFERENCES provinsi (id),
+    foreign key (id_kabupaten) REFERENCES kabupaten (id),
+    foreign key (id_kecamatan) references kecamatan (id),
+    foreign key (id_desa) REFERENCES desa (id),
+    foreign key (id_bidang_usaha) REFERENCES bidang_usaha(id),
+    foreign key (id_skala_usaha) REFERENCES skala_usaha(id),
+    foreign key (id_sektor_usaha) REFERENCES sektor_usaha(id),
+    foreign key (id_faktor_rendahnya_laba) REFERENCES faktor_rendahnya_laba(id)
+)
+    
