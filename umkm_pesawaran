@@ -47,6 +47,14 @@ create table temp_desa
 )
 
 masukkan data csv pakai import (desa.csv)
+
+LOAD DATA INFILE 'D:/KULIAH/SEMESTER 6/Magang/Project/final/dataset/desa.csv'
+INTO TABLE temp_desa
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(desa, kecamatan);
+
 drop table temp_desa
 
 create table bidang_usaha
