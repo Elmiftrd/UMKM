@@ -92,14 +92,14 @@ create table skala_usaha
     primary key(id)
 );
 
-create table faktor_laba_rendah
+create table faktor_rendahnya_laba
 (
     id int not null auto_increment,
     faktor varchar (100),
     primary key (id)
 )
 
-insert into faktor_laba_rendah(faktor)
+insert into faktor_rendahnya_laba(faktor)
 values ('Kurang Promosi'),('Kurang Tenaga Kerja'),('Persaingan Ketat'),('kurang keterampilan'),('Keterbatasan Modal'),('Keterbatasan Ruang'),('Tidak Rendah')
 
 create table data_usaha 
@@ -113,7 +113,8 @@ create table data_usaha
     id_sektor_usaha int,
     id_skala_usaha int,
     jumlah_karyawan int,
-    id_faktor_laba_rendah int,
+    tahun int,
+    id_faktor_rendahnya_laba int,
     primary key(id),
     foreign key (id_kabupaten) REFERENCES kabupaten (id),
     foreign key (id_kecamatan) references kecamatan (id),
@@ -121,8 +122,57 @@ create table data_usaha
     foreign key (id_bidang_usaha) REFERENCES bidang_usaha(id),
     foreign key (id_skala_usaha) REFERENCES skala_usaha(id),
     foreign key (id_sektor_usaha) REFERENCES sektor_usaha(id),
-    foreign key (id_faktor_laba_rendah) REFERENCES faktor_laba_rendah(id)
+    foreign key (id_faktor_rendahnya_laba) REFERENCES faktor_rendahnya_laba(id)
 )
+
+CREATE TABLE temp_usaha (
+    nama_usaha VARCHAR(50),
+    kabupaten varchar (50),
+    kecamatan VARCHAR(50),
+    desa VARCHAR(50),
+    sektor_usaha VARCHAR(50),
+    bidang_usaha VARCHAR(50),
+    skala_usaha VARCHAR(50),
+    jumlah_karyawan INT,
+    tahun int,
+    faktor_rendahnya_laba varchar (50)
+);
+
+import data csv ke temp
+
+INSERT INTO data_usaha (
+    nama_usaha, 
+    id_kabupaten, 
+    id_kecamatan, 
+    id_desa, 
+    id_bidang_usaha, 
+    id_sektor_usaha, 
+    id_skala_usaha, 
+    jumlah_karyawan, 
+    tahun, 
+    id_faktor_rendahnya_laba
+)
+SELECT 
+    t.nama_usaha, 
+    k.id AS id_kabupaten, 
+    kc.id AS id_kecamatan, 
+    d.id AS id_desa, 
+    b.id AS id_bidang_usaha, 
+    s.id AS id_sektor_usaha, 
+    sk.id AS id_skala_usaha, 
+    t.jumlah_karyawan, 
+    t.tahun, 
+    f.id AS id_faktor_rendahnya_laba
+FROM temp_usaha t
+LEFT JOIN kabupaten k ON t.kabupaten = k.kabupaten
+LEFT JOIN kecamatan kc ON t.kecamatan = kc.kecamatan
+LEFT JOIN desa d ON t.desa = d.desa
+LEFT JOIN bidang_usaha b ON t.bidang_usaha = b.bidang
+LEFT JOIN sektor_usaha s ON t.sektor_usaha = s.sektor
+LEFT JOIN skala_usaha sk ON t.skala_usaha = sk.skala
+LEFT JOIN faktor_rendahnya_laba f ON t.faktor_rendahnya_laba = f.faktor;
+
+
     
     
 
