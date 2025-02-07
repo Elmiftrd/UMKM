@@ -46,14 +46,19 @@ create table temp_desa
       kecamatan varchar (50)
 )
 
-masukkan data csv pakai import (desa.csv)
-
+masukkan data csv 
 LOAD DATA INFILE 'D:/KULIAH/SEMESTER 6/Magang/Project/final/dataset/desa.csv'
 INTO TABLE temp_desa
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (desa, kecamatan);
+
+menghubungkan tabel desa dengan kecamatan 
+INSERT INTO desa (desa, id_kecamatan)
+SELECT t.desa, k.id 
+FROM temp_desa t
+JOIN kecamatan k ON t.kecamatan = k.kecamatan;
 
 drop table temp_desa
 
@@ -180,6 +185,7 @@ LEFT JOIN sektor_usaha s ON t.sektor_usaha = s.sektor
 LEFT JOIN skala_usaha sk ON t.skala_usaha = sk.skala
 LEFT JOIN faktor_rendahnya_laba f ON t.faktor_rendahnya_laba = f.faktor;
 
+data sudah masuk tapi jumlah di data_usaha jadi banyak
 
     
     
